@@ -1,0 +1,50 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd ">
+
+
+    <!--使用spring组件扫描
+    一次性配置此包下所有的Handler-->
+    <context:component-scan base-package="controller"/>
+
+    <!--注解处理器映射器-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    
+    <!--注解的适配器-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+    <!--加入json数据的消息转换器
+      MappingJacksonHttpMessageConverter依赖jackson的两个jar包-->
+      <property name="messageConverters">
+          <list>
+          		<!-- spring4.0以上版本用Jackson2Http.... -->
+          		<!-- 以下版本没有 2 -->
+              <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+          </list>
+      </property>
+	</bean>
+
+    <!--配置视图解析器
+    要求将jstl的包加到classpath
+    prefix:代表请求url的前缀
+    suffix:代表请求url的后缀
+    设置了这两个属性值后我们在Controller中进行代码开发时返回的modelandview对象设置的页面路径值就不用带前缀名和后缀名了-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+	<!-- 对整个包扫描handler -->
+	<context:component-scan base-package="Controller"></context:component-scan>
+
+</beans>
